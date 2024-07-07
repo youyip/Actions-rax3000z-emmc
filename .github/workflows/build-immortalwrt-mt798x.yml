@@ -16,8 +16,8 @@ permissions: write-all
 on:
   workflow_dispatch:
     inputs:
-      USE_MTWIFI_CFG:
-        description: 'Use mtwifi-cfg'
+      USE_XR30_LED_DTS:
+        description: 'Use xr30 led dts'
         required: true
         default: true
         type: boolean
@@ -37,7 +37,6 @@ env:
   FREE_DISK_SH: scripts/free_disk_space.sh
   ENV_SH: scripts/environment.sh
   DIY_SH: scripts/diy.sh
-  CLASH_CORE: scripts/preset-clash-core.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -99,10 +98,9 @@ jobs:
         [ -e files ] && mv files openwrt/files
         cat configs/rax3000m-emmc_mtksdk.config >> openwrt/.config
 
-    - name: 设置无线控制界面样式
-      if: env.USE_MTWIFI_CFG == 'true'
+    - name: 设置是否使用 xr30 led dts
       run: |
-        sed -i '/CONFIG_PACKAGE_luci-app-mtk=y/{N;N;N;s/CONFIG_PACKAGE_luci-app-mtk=y\nCONFIG_PACKAGE_luci-i18n-mtk-zh-cn=y\nCONFIG_PACKAGE_wifi-profile=y\nCONFIG_WIFI_NORMAL_SETTING=y/CONFIG_PACKAGE_lua-cjson=y\nCONFIG_PACKAGE_luci-app-mtwifi-cfg=y\nCONFIG_PACKAGE_luci-i18n-mtwifi-cfg-zh-cn=y\nCONFIG_PACKAGE_mtwifi-cfg=y/}' openwrt/.config
+        cp mt7981-cmcc-xr30-emmc.dtsi openwrt/target/linux/mediatek/mt7981/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m.dtsi
 
     - name: 设置是否使用 nx30pro eeprom
       if: env.USE_NX30PRO_EEPROM == 'true'
@@ -122,7 +120,6 @@ jobs:
     - name: 下载文件
       run: |
         cd openwrt
-        chmod +x $GITHUB_WORKSPACE/$CLASH_CORE && $GITHUB_WORKSPACE/$CLASH_CORE
         make defconfig
         make download -j8 V=10
         find dl -size -1024c -exec ls -l {} \;
@@ -171,14 +168,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         echo -e "### immortalwrt-mt7981-cmcc_rax3000m-emmc" >> release.txt
-        wlan_luci_interface=""
-        if grep -q 'CONFIG_PACKAGE_mtwifi-cfg=y' openwrt/.config; then
-          echo "- 使用 OpenWrt 原生无线控制界面" >> release.txt
-          wlan_luci_interface="mtwifi-cfg"
-        else
-          echo "- 使用 MTK SDK 无线控制界面" >> release.txt
-          wlan_luci_interface="luci-app-mtk"
-        fi
+        
         eeprom_status=""
         if [ -e openwrt/target/linux/mediatek/mt7981/base-files/lib/firmware/MT7981_iPAiLNA_EEPROM.bin ] ; then
           echo "- eeprom 使用 H3C NX30 Pro 提取版本" >> release.txt
