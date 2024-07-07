@@ -1,6 +1,6 @@
 **闭源驱动** | [开源驱动](README_mainline.md)
 
-# Actions-rax3000m-emmc
+# Actions-rax3000z-emmc
 使用 GitHub Actions 在线编译定制 CMCC RAX3000Z eMMC version （RAX3000Z增强版-XR30）的 immortalwrt-mt798x 固件
 
 ## 固件特性
