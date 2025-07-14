@@ -88,7 +88,7 @@ jobs:
         cd openwrt
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        #git fetch https://github.com/padavanonly/immortalwrt-mt798x
+        #git fetch https://github.com/padavanonly/immortalwrt-mt798x-6.6
         #git merge FETCH_HEAD
         ./scripts/feeds update -a && ./scripts/feeds install -a        
         chmod +x $GITHUB_WORKSPACE/$DIY_SH && $GITHUB_WORKSPACE/$DIY_SH
@@ -100,7 +100,7 @@ jobs:
 
     - name: 设置是否使用 xr30 led dts
       run: |
-        cp mt7981-cmcc-xr30-emmc.dtsi openwrt/target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m.dtsi
+        cp mt7981-cmcc-xr30-emmc.dtsi openwrt/target/linux/mediatek/files-6.6/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m.dtsi
 
     - name: 设置是否使用 nx30pro eeprom
       if: env.USE_NX30PRO_EEPROM == 'true'
