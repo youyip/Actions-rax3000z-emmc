@@ -33,7 +33,7 @@ on:
         type: boolean
 
 env:
-  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/2410
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
   FREE_DISK_SH: scripts/free_disk_space.sh
   ENV_SH: scripts/environment.sh
   DIY_SH: scripts/diy.sh
@@ -88,7 +88,7 @@ jobs:
         cd openwrt
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        #git fetch https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/2410
+        #git fetch https://github.com/padavanonly/immortalwrt-mt798x-6.6
         #git merge FETCH_HEAD
         ./scripts/feeds update -a && ./scripts/feeds install -a        
         chmod +x $GITHUB_WORKSPACE/$DIY_SH && $GITHUB_WORKSPACE/$DIY_SH
