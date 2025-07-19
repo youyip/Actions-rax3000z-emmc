@@ -72,9 +72,9 @@ jobs:
       run: df -hT
 
     - name: 克隆源码
-      working-directory: /workdir
-      run: |
-      git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
+  working-directory: /workdir
+  run: |
+    git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 开启缓存
